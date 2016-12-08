@@ -13,14 +13,6 @@ app.use(bodyParser.json());
 // 	id: 1,
 // 	description: 'Meet bf for lunch',
 // 	completed: false
-// },{
-// 	id: 2,
-// 	description: 'go to market',
-// 	completed: false	
-// },{
-// 	id: 3,
-// 	description: 'have breakfast',
-// 	completed: true	
 // }];
 
 app.get('/', function (req, res) {
@@ -33,9 +25,8 @@ app.get('/todos', function (req, res) {
 })
 //GET the single todo
 app.get('/todos/:id', function (req, res) {
-	//res.send('asking for id ' + req.params.id);
+
 	var todoId = parseInt(req.params.id);
-	console.log(todos);
 	var matchedTodo = _.findWhere(todos, {id: todoId});
 
 	if(matchedTodo){
@@ -58,8 +49,23 @@ app.post('/todos', function (req, res) {
 	body.id = todoNextId++;
 
 	todos.push(body);
-	
+
 	res.json(body);
+})
+
+//DELETE /todos/:id
+app.delete('/todos/:id', function (req, res) {
+	var todoId = parseInt(req.params.id);
+	var matchedTodo = _.findWhere(todos, {id: todoId});
+
+	if (!matchedTodo) {
+		res.status(404).json({"error":"no todo found with that ID"});
+	}else{
+		todos = _.without(todos, matchedTodo);
+		res.json(matchedTodo);
+	}
+
+
 })
 
 app.listen(PORT, function () {
