@@ -1,0 +1,16 @@
+1. check ssh key
+ls -al ~/.ssh
+//-rw-r--r-- 1 Jarir 197609 3243 12月  5 21:47 id_rsa
+//-rw-r--r-- 1 Jarir 197609  744 12月  5 21:47 id_rsa.pub
+
+
+2 generate ssh key
+ssh-keygen -t rsa -b 4096 -C "your email"
+
+3 print the file
+	-more ~/.ssh/id_rsa.pub
+	-tail -f ~/.ssh/id_rsa.pub  (this works)
+
+4 download heroku toolbelt
+ -login the heroku
+ heroku login
