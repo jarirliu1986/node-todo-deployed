@@ -42,24 +42,7 @@ app.get('/todos', function (req, res) {
 		res.json(todos);
 	}, function (e) {
 		res.status(500).send();
-	})
-
-
-	// var filterTodos = todos;
-
-	// if(queryParams.hasOwnProperty('completed') && queryParams.completed === 'true'){
-	// 	filterTodos = _.where(filterTodos, {completed: true});
-	// }else if(queryParams.hasOwnProperty('completed') && queryParams.completed === 'false'){
-	// 	filterTodos = _.where(filterTodos, {completed: false});
-	// }
-
-	// if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0) {
-	// 	filterTodos = _.filter(filterTodos, function (todo) {
-	// 		return todo.description.toLowerCase().indexOf(queryParams.q) > -1;
-	// 	})
-	// }
-
-	// res.json(filterTodos);
+	});
 
 });
 
@@ -76,13 +59,6 @@ app.get('/todos/:id', function (req, res) {
 	}, function(e){
 		res.status(500).send();
 	});
-	// var matchedTodo = _.findWhere(todos, {id: todoId});
-
-	// if(matchedTodo){
-	// 	res.json(matchedTodo);
-	// }else{
-	// 	res.status(404).send();
-	// }
 })
 
 //POST can take data /todos
@@ -99,30 +75,28 @@ app.post('/todos', function (req, res) {
 		res.status(400).json(e);
 	})
 
-	//input validation
-	// if (!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0) {
-	// 	return res.status(400).send();
-	// }
-
-	// body.description = body.description.trim();
-	// body.id = todoNextId++;
-
-	// todos.push(body);
-
-	// res.json(body);
 })
 
 //DELETE /todos/:id
 app.delete('/todos/:id', function (req, res) {
 	var todoId = parseInt(req.params.id);
-	var matchedTodo = _.findWhere(todos, {id: todoId});
 
-	if (!matchedTodo) {
-		res.status(404).json({"error":"no todo found with that ID"});
-	}else{
-		todos = _.without(todos, matchedTodo);
-		res.json(matchedTodo);
-	}
+	db.todo.destroy({
+		where:{
+			id: todoId
+		}
+	}).then(function (rowsDeleted) {
+		if(rowsDeleted === 0){
+			res.status(404).json({
+				error: 'No todo with ID'
+			})
+		}else{
+			res.status(204).send();
+		}
+	}, function (e) {
+		res.status(500).send();
+	});
+
 })
 
 //PUT /todos/:id
