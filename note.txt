@@ -14,3 +14,10 @@ ssh-keygen -t rsa -b 4096 -C "your email"
 4 download heroku toolbelt
  -login the heroku
  heroku login
+ heroku create
+ heroku apps
+ heroku open
+
+5 database
+heroku addons:create heroku-postgresql:hobby-dev //addon
+heroku pg:wait   //wait untill the database complete
